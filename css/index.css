@@ -70,7 +70,7 @@ h2 {
   color: #fff;
 }
 
-#example_wrapper {
+#example_wrapper > div:first-child {
   padding-top: 20px;
 }
 
@@ -188,7 +188,7 @@ table button.delete:hover {
   display: flex;
   align-items: center;
   font-weight: 500;
-  font-family: "Pacifico", cursive;
+  font-family: "Bree Serif", serif;
   padding-inline: 30px;
   font-size: 18px;
 }

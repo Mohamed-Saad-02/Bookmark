@@ -123,9 +123,12 @@ function displaySites(arr = siteContainer) {
   }
   table.draw();
 
-  const { showCounter, showPagination } = handleShowOptionTable();
+  const { showCounter, showPagination, showInputSearchAndEntries } =
+    handleShowOptionTable();
+
   showCounter();
   showPagination();
+  showInputSearchAndEntries();
 }
 
 // ==== Handle Clear Inputs ====
@@ -155,7 +158,8 @@ function deleteSite(index) {
   siteContainer.splice(index, 1);
   localStorage.setItem("sites", JSON.stringify(siteContainer));
   displaySites(siteContainer);
-  handleShowOptionTable();
+  const { showCounter } = handleShowOptionTable();
+  showCounter();
 }
 
 // Check Correct Data From User
@@ -203,6 +207,10 @@ function closeModal() {
 
 // ==== Handle Show Option Table ====
 function handleShowOptionTable() {
+  const optionHeader = document.querySelector(
+    "#example_wrapper > div:first-child"
+  );
+
   const visibleSite = Array.from(document.querySelectorAll("#tableContent tr"));
   const numSite = visibleSite.filter((el) =>
     el.classList.contains("value")
@@ -213,7 +221,7 @@ function handleShowOptionTable() {
     showCounter() {
       if (numSite > 0) {
         siteResult.classList.add("count-site");
-        siteResult.innerHTML = `${numSite} Site`;
+        siteResult.innerHTML = `${numSite} Site In Table`;
       } else {
         siteResult.classList.remove("count-site");
         siteResult.innerHTML = ``;
@@ -232,9 +240,21 @@ function handleShowOptionTable() {
         else pagination.classList.add("d-none");
       }
     },
+    showInputSearchAndEntries() {
+      if (numSite > 0) {
+        if (optionHeader.classList.contains("d-none"))
+          optionHeader.classList.replace("d-none", "d-flex");
+        else optionHeader.classList.add("d-flex");
+      } else {
+        if (optionHeader.classList.contains("d-flex"))
+          optionHeader.classList.replace("d-flex", "d-none");
+        else optionHeader.classList.add("d-none");
+      }
+    },
   };
 }
 
+// update Counter of Site
 selectEntries.addEventListener("change", () => {
   const { showCounter } = handleShowOptionTable();
   showCounter();
