@@ -9,9 +9,6 @@ const table = new DataTable("#example", {
   // lengthChange: false,
 
   responsive: true,
-  search: {
-    boundary: true,
-  },
 });
 
 const siteName = document.getElementById("siteName");
@@ -19,25 +16,33 @@ const siteURL = document.getElementById("siteURL");
 const submitBtn = document.getElementById("submitBtn");
 const modal = document.getElementById("modal");
 const closeModalBtn = document.getElementById("closeModalBtn");
+
+// Table
+const selectEntries = document.querySelector('[name="example_length"]');
+const inputSearch = document.querySelector(
+  "#example_wrapper > div:first-child > div:last-child input"
+);
 const siteResult = document.querySelector(
   "#example_wrapper > div:last-child > div:first-child"
 );
-const inputSearch = document.querySelector(
-  "#example_wrapper > div:first-child > div:last-child input"
+const pagination = document.querySelector(
+  "#example_wrapper > div:last-child > div:last-child"
 );
 
 let siteContainer = [];
 
 if (localStorage.sites) defaultValue();
 
-inputSearch.addEventListener("input", handleCountSite);
+inputSearch.addEventListener("input", () => {
+  const { showCounter } = handleShowOptionTable();
+  showCounter();
+});
 
 // Default SetValue
 function defaultValue() {
   siteContainer = JSON.parse(localStorage.sites);
-  inputSearch.setAttribute("placeholder", "Search");
+  inputSearch.setAttribute("placeholder", "Search...");
   displaySites(siteContainer);
-  handleCountSite();
 }
 
 // Regex of SiteName and SiteURL
@@ -47,7 +52,6 @@ const siteURLRegex =
 
 submitBtn.addEventListener("click", () => {
   addSite();
-  handleCountSite();
 });
 
 // ==== Main Function To Site ====
@@ -118,6 +122,10 @@ function displaySites(arr = siteContainer) {
     table.row.add(row);
   }
   table.draw();
+
+  const { showCounter, showPagination } = handleShowOptionTable();
+  showCounter();
+  showPagination();
 }
 
 // ==== Handle Clear Inputs ====
@@ -147,6 +155,7 @@ function deleteSite(index) {
   siteContainer.splice(index, 1);
   localStorage.setItem("sites", JSON.stringify(siteContainer));
   displaySites(siteContainer);
+  handleShowOptionTable();
 }
 
 // Check Correct Data From User
@@ -192,18 +201,41 @@ function closeModal() {
   document.body.classList.remove("overflow-hidden");
 }
 
-// ==== Length of siteContainer ====
-function handleCountSite() {
+// ==== Handle Show Option Table ====
+function handleShowOptionTable() {
   const visibleSite = Array.from(document.querySelectorAll("#tableContent tr"));
   const numSite = visibleSite.filter((el) =>
     el.classList.contains("value")
   ).length;
 
-  if (numSite > 0) {
-    siteResult.classList.add("count-site");
-    siteResult.innerHTML = `${numSite} Site`;
-  } else {
-    siteResult.classList.remove("count-site");
-    siteResult.innerHTML = ``;
-  }
+  return {
+    // Show Count of Site
+    showCounter() {
+      if (numSite > 0) {
+        siteResult.classList.add("count-site");
+        siteResult.innerHTML = `${numSite} Site`;
+      } else {
+        siteResult.classList.remove("count-site");
+        siteResult.innerHTML = ``;
+        console.log("no");
+      }
+    },
+    // showPagination of Table
+    showPagination() {
+      if (numSite > 0) {
+        if (pagination.classList.contains("d-none"))
+          pagination.classList.replace("d-none", "d-block");
+        else pagination.classList.add("d-block");
+      } else {
+        if (pagination.classList.contains("d-block"))
+          pagination.classList.replace("d-block", "d-none");
+        else pagination.classList.add("d-none");
+      }
+    },
+  };
 }
+
+selectEntries.addEventListener("change", () => {
+  const { showCounter } = handleShowOptionTable();
+  showCounter();
+});

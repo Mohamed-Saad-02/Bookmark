@@ -192,3 +192,11 @@ table button.delete:hover {
   padding-inline: 30px;
   font-size: 18px;
 }
+
+.dt-length select {
+  font-family: "Pacifico", cursive;
+}
+
+.dt-length label {
+  font-family: "Bree Serif", serif;
+}
