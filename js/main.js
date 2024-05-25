@@ -5,10 +5,15 @@ const table = new DataTable("#example", {
     [0, "asc"],
     [1, ""],
   ],
-  // paging: false,
-  // lengthChange: false,
+  lengthChange: false,
 
   responsive: true,
+
+  layout: {
+    topStart: {
+      buttons: ["copy", "csv", "excel", "pdf", "print"],
+    },
+  },
 });
 
 const siteName = document.getElementById("siteName");
@@ -18,7 +23,6 @@ const modal = document.getElementById("modal");
 const closeModalBtn = document.getElementById("closeModalBtn");
 
 // Table
-const selectEntries = document.querySelector('[name="example_length"]');
 const inputSearch = document.querySelector(
   "#example_wrapper > div:first-child > div:last-child input"
 );
@@ -225,7 +229,6 @@ function handleShowOptionTable() {
       } else {
         siteResult.classList.remove("count-site");
         siteResult.innerHTML = ``;
-        console.log("no");
       }
     },
     // showPagination of Table
@@ -253,9 +256,3 @@ function handleShowOptionTable() {
     },
   };
 }
-
-// update Counter of Site
-selectEntries.addEventListener("change", () => {
-  const { showCounter } = handleShowOptionTable();
-  showCounter();
-});
