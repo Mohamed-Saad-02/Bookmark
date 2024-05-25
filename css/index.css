@@ -70,8 +70,39 @@ h2 {
   color: #fff;
 }
 
+#example_wrapper {
+  padding-top: 20px;
+}
+
+#example_wrapper > div:first-child > div:last-child label {
+  display: none;
+}
+
+#example_wrapper > div:first-child > div:last-child input {
+  width: 250px;
+  font-family: "Righteous", sans-serif;
+}
+
+table thead th#indexURL,
+table thead th#indexName {
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+table thead th#indexURL:hover,
+table thead th#indexName:hover {
+  background-color: #ddd;
+}
+
+table thead th.active {
+  background-color: #ddd;
+}
+
 table tbody {
   vertical-align: middle !important;
+}
+table tbody tr td {
+  text-align: center !important;
 }
 
 table tbody .icon {
@@ -151,4 +182,13 @@ table button.delete:hover {
 
 .data-info .body ol li i {
   color: #bb4120;
+}
+
+.count-site {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-family: "Pacifico", cursive;
+  padding-inline: 30px;
+  font-size: 18px;
 }

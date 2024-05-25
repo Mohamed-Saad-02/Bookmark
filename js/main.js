@@ -1,24 +1,53 @@
+const table = new DataTable("#example", {
+  info: false,
+  columnDefs: [{ orderable: false, targets: [2, 3] }],
+  order: [
+    [0, "asc"],
+    [1, ""],
+  ],
+  // paging: false,
+  // lengthChange: false,
+
+  responsive: true,
+  search: {
+    boundary: true,
+  },
+});
+
 const siteName = document.getElementById("siteName");
 const siteURL = document.getElementById("siteURL");
 const submitBtn = document.getElementById("submitBtn");
 const modal = document.getElementById("modal");
 const closeModalBtn = document.getElementById("closeModalBtn");
+const siteResult = document.querySelector(
+  "#example_wrapper > div:last-child > div:first-child"
+);
+const inputSearch = document.querySelector(
+  "#example_wrapper > div:first-child > div:last-child input"
+);
+
+let siteContainer = [];
+
+if (localStorage.sites) defaultValue();
+
+inputSearch.addEventListener("input", handleCountSite);
+
+// Default SetValue
+function defaultValue() {
+  siteContainer = JSON.parse(localStorage.sites);
+  inputSearch.setAttribute("placeholder", "Search");
+  displaySites(siteContainer);
+  handleCountSite();
+}
 
 // Regex of SiteName and SiteURL
 const siteNameRegex = /^\w{3,}(\s+\w+)*$/;
 const siteURLRegex =
   /(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
 
-let siteContainer = [];
-
-// ==== Check If There Is Data In LocalStorage ====
-if (localStorage.getItem("sites")) {
-  siteContainer = JSON.parse(localStorage.getItem("sites"));
-  displaySites(siteContainer);
-}
-
 submitBtn.addEventListener("click", () => {
   addSite();
+  handleCountSite();
 });
 
 // ==== Main Function To Site ====
@@ -37,21 +66,25 @@ function addSite() {
     displaySites(siteContainer);
     clearInputs();
   } else {
-    document.body.classList.add("overflow-hidden");
     modal.classList.add("active");
+    document.body.classList.add("overflow-hidden");
   }
 }
 
 // ==== Display Sites On Page ====
 function displaySites(arr = siteContainer) {
-  let box = "";
+  table.clear();
+
   for (let i = 0; i < arr.length; i++) {
-    box += `
-    <tr data-index=${i}>
+    const row = document.createElement("tr");
+    row.classList.add("value");
+
+    row.innerHTML = `
+    
       <td>${i + 1}</td>
       <td>
         <div
-          class="d-flex align-items-center justify-content-center gap-2"
+          class="d-flex align-items-center justify-content-center column-gap-2 row-gap-1 flex-wrap"
         >
           <div class="image">
           <img
@@ -67,23 +100,24 @@ function displaySites(arr = siteContainer) {
         </div>
       </td>
       <td>
-        <button class="btn visit" id="visitBtn" onclick="visitURL('${
+        <button class="btn visit d-flex align-items-center justify-content-center flex-wrap column-gap-2 row-gap-1 mx-auto" id="visitBtn" onclick="visitURL('${
           arr[i].siteURL
         }')">
-          <i class="fa-solid fa-eye pe-2"></i>Visit
+          <i class="fa-solid fa-eye"></i>Visit
         </button>
       </td>
       <td>
-        <button class="btn pe-2 delete" onclick="deleteSite(${i})">
+        <button class="btn delete d-flex align-items-center justify-content-center flex-wrap column-gap-2 row-gap-1 mx-auto" onclick="deleteSite(${i})">
           <i class="fa-solid fa-trash-can"></i>
           Delete
         </button>
       </td>
-    </tr>
+    
     `;
-  }
 
-  document.getElementById("tableContent").innerHTML = box;
+    table.row.add(row);
+  }
+  table.draw();
 }
 
 // ==== Handle Clear Inputs ====
@@ -145,18 +179,31 @@ document.addEventListener("click", (e) => {
   if (
     e.target.classList.contains("active") &&
     e.target.classList.contains("data-info")
-  ) {
+  )
     closeModal();
-  }
 });
 
 document.addEventListener("keydown", (e) => {
-  if (e.key == "Escape" && modal.classList.contains("active")) {
-    closeModal();
-  }
+  if (e.key == "Escape" && modal.classList.contains("active")) closeModal();
 });
 
 function closeModal() {
   modal.classList.remove("active");
   document.body.classList.remove("overflow-hidden");
+}
+
+// ==== Length of siteContainer ====
+function handleCountSite() {
+  const visibleSite = Array.from(document.querySelectorAll("#tableContent tr"));
+  const numSite = visibleSite.filter((el) =>
+    el.classList.contains("value")
+  ).length;
+
+  if (numSite > 0) {
+    siteResult.classList.add("count-site");
+    siteResult.innerHTML = `${numSite} Site`;
+  } else {
+    siteResult.classList.remove("count-site");
+    siteResult.innerHTML = ``;
+  }
 }

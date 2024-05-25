@@ -9,8 +9,12 @@
     <link rel="stylesheet" href="./css/bootstrap.min.css" />
     <!-- Font Awesome -->
     <link rel="stylesheet" href="./css/all.min.css" />
+    <!-- Data Table -->
+    <link rel="stylesheet" href="./css/datatables.min.css" />
     <!-- Main CSS -->
     <link rel="stylesheet" href="./css/index.css" />
+    <!-- Media CSS -->
+    <link rel="stylesheet" href="./css/media.css" />
   </head>
   <body>
     <main class="min-vh-100 py-5">
@@ -19,7 +23,7 @@
       <div class="container">
         <div class="bookmark py-4 px-3 mt-5">
           <h2
-            class="d-flex align-items-center justify-content-center fw-medium gap-1 mx-auto"
+            class="d-flex align-items-center justify-content-center fw-medium gap-1 mx-auto text-center"
           >
             <i class="fa-solid fa-bookmark"></i>
             Bookmark your favorite sites
@@ -59,13 +63,17 @@
             Submit
           </button>
         </div>
-        <table class="table mt-4 text-center bg-light">
+        <table id="example" class="table mt-4 table-striped text-center w-100">
           <thead>
             <tr>
-              <th class="text-capitalize" id="indexURL">index</th>
-              <th class="text-capitalize" id="indexName">Website Name</th>
-              <th class="text-capitalize">Visit</th>
-              <th class="text-capitalize">Delete</th>
+              <th class="text-capitalize text-center active" id="indexURL">
+                index
+              </th>
+              <th class="text-capitalize text-center" id="indexName">
+                Website Name
+              </th>
+              <th class="text-capitalize text-center">Visit</th>
+              <th class="text-capitalize text-center">Delete</th>
             </tr>
           </thead>
           <tbody id="tableContent"></tbody>
@@ -109,6 +117,7 @@
       </div>
     </main>
     <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/datatables.min.js"></script>
     <script src="./js/main.js"></script>
   </body>
 </html>
