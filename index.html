@@ -59,9 +59,20 @@
               spellcheck="false"
             />
           </div>
-          <button id="submitBtn" class="btn mt-4 mx-auto px-5 d-block">
-            Submit
-          </button>
+          <div>
+            <button
+              id="submitBtn"
+              class="submit-btn btn mt-4 mx-auto px-5 d-block"
+            >
+              Submit
+            </button>
+            <button
+              id="updateBtn"
+              class="btn btn-success mt-4 mx-auto px-5 d-block d-none"
+            >
+              Update
+            </button>
+          </div>
         </div>
         <table id="example" class="table mt-4 table-striped text-center w-100">
           <thead>
@@ -74,6 +85,7 @@
               </th>
               <th class="text-capitalize text-center">Visit</th>
               <th class="text-capitalize text-center">Delete</th>
+              <th class="text-capitalize text-center">Update</th>
             </tr>
           </thead>
           <tbody id="tableContent"></tbody>

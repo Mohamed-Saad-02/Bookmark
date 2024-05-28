@@ -1,14 +1,12 @@
 const table = new DataTable("#example", {
   info: false,
-  columnDefs: [{ orderable: false, targets: [2, 3] }],
+  columnDefs: [{ orderable: false, targets: [2, 3, 4] }],
   order: [
     [0, "asc"],
     [1, ""],
   ],
   lengthChange: false,
-
   responsive: true,
-
   layout: {
     topStart: {
       buttons: ["copy", "csv", "excel", "pdf", "print"],
@@ -19,6 +17,7 @@ const table = new DataTable("#example", {
 const siteName = document.getElementById("siteName");
 const siteURL = document.getElementById("siteURL");
 const submitBtn = document.getElementById("submitBtn");
+const updateBtn = document.getElementById("updateBtn");
 const modal = document.getElementById("modal");
 const closeModalBtn = document.getElementById("closeModalBtn");
 
@@ -120,7 +119,9 @@ function displaySites(arr = siteContainer) {
           Delete
         </button>
       </td>
-    
+      <td>
+      <button class="edit btn" onclick="setValue(${i})"><i class="fa-solid fa-pen"></i> Update</button>
+      </td>
     `;
 
     table.row.add(row);
@@ -164,6 +165,33 @@ function deleteSite(index) {
   displaySites(siteContainer);
   const { showCounter } = handleShowOptionTable();
   showCounter();
+}
+
+// ==== Handle Update Site ====
+
+let updateIndex = 0;
+function setValue(index) {
+  updateIndex = index;
+  const { siteName: name, siteURL: url } = siteContainer[index];
+  siteName.value = name;
+  siteURL.value = url;
+  submitBtn.classList.replace("d-block", "d-none");
+  updateBtn.classList.replace("d-none", "d-block");
+}
+
+updateBtn.addEventListener("click", () => {
+  updateSite(updateIndex);
+});
+
+function updateSite(index) {
+  siteContainer[index].siteName = siteName.value;
+  siteContainer[index].siteURL = siteURL.value;
+
+  submitBtn.classList.replace("d-none", "d-block");
+  updateBtn.classList.replace("d-block", "d-none");
+  localStorage.setItem("sites", JSON.stringify(siteContainer));
+  displaySites(siteContainer);
+  clearInputs();
 }
 
 // Check Correct Data From User
